@@ -12,14 +12,6 @@
 
 В листинге~\ref{algo:NP} приведён псевдокод Алгоритма НП.
 
-% At first, we assume, that each RSM box (of given grammar) is acyclic (if not, we can replace cycles with recursive call (how? {\color{red}{TODO}}))
-% Then we can topologically sort every box (so that for every arc $q_i \rightarrow v \Leftrightarrow u < v$).
-
-
-% We use two data structures: queue $Q$, storing edges, that should be added, but have not been yet, and Disjoint Set $D$, maintaining components in Kronecker product graph.
-
-% Firstly, we add all arcs from initial Kronecker product into $Q$ and then start to iterate over it. At each step we take next arc from queue and join corresponding sets in $D$. If they are in differents sets and adding the edge leads to appearance of new path $(q_s, u) \rightsquigarrow (q_f, v)$ from start to final terminal of some box $S$, we add new arc form $u$ to $v$ labeled with $S$. After that we add this arc into Kronecker product: we iterate over all arcs $q_i \rightarrow q_j$ in grammar $G$ labeled with $S$ and add new edge $(q_i, u) \rightarrow (q_j, v)$ into $Q$. 
-
 \begin{algorithm}[H]
     \floatname{algorithm}{Listing}
     \begin{algorithmic}[1]
@@ -41,7 +33,7 @@
                 \Comment{Нашли новый путь}
                 \State{$A \gets A \cup getEdges(i, u, v)$}
                 \State{$Q.PushAll(getEdges(i, u, v))$}
-                \State{$D.Join(u, v, Q)$}
+                \State{$D.Union(u, v)$}
                 \Comment{Добавляем новые рёбра}
             \EndIf
         \EndWhile
@@ -52,7 +44,7 @@
 
 Для реализации алгоритма используются две вспомогательные структуры данных: очередь $Q$, хранящая рёбра, которые были добавлены в граф, но ещё не обработаны (как и в оригинальном алгоритме П2), и СНМ $D$, поддерживающая компоненты связности и поиск новых путей $\langle$стартовое состояние$\to$конечное состояние$\rangle$. 
 
-Опишем подробно структуру используемого СНМ (в листинге~\ref{algo:DSU} приведён псевдокод функций \textit{Join()} и \textit{Get()}).
+Опишем подробно структуру используемого СНМ (в листинге~\ref{algo:DSU} приведён псевдокод.
 
 \algblockdefx[Structure]{Structure}{EndStructure}
 [1]{{\bf Structure} #1}
@@ -63,48 +55,70 @@
     \begin{algorithmic}[1]
     \caption{Система Непересекающихся Множеств}
     \label{algo:DSU}
-    \Structure{DisjointSetUnion}
-        \Function{DisjointSetUnion}{$V$}
+    \Structure{DisjointSets}
+        \Function{DisjointSets}{$V$}
             \For{$v \in V$}
                 \State{$P[v] \gets v$}
                 \Comment{Предкок}
                 \State{$R[v] \gets 0$}
                 \Comment{Ранг}
+            \EndFor
+            \For{$v \in En(V)$}
                 \State{$En[v] \gets \{v \}$}
                 \Comment{Список стартовых вершин поддерева}
+            \EndFor
+            \For{$v \in Ex(V)$}
                 \State{$Ex[v] \gets \{v \}$}
                 \Comment{Список конечных вершин поддерева}
             \EndFor
+        \EndFunction
+        \Function{Find}{$v$}
+            \If{$P[v] = v$}
+                \Return $v$
+            \EndIf
+            \Return $P[v] = Find(P[v])$
+            \Comment{Эвристика сжатие путей}
+        \EndFunction
+        \Function{Union}{$u, v$}
+            \State{$u \gets Find(u)$}
+            \State{$v \gets Find(v)$}
+            \If{$u = v$}
+                \Return
+            \EndIf
+            \If{$R[u] > R[v]$}
+                \State{$Swap(u, v)$}
+                \Comment{Ранговая эвристика}
+            \EndIf
+            \State{$Q.PushAll(\{ \langle en_u, ex_v \rangle~|~en_u \in En[u], ex_v \in Ex[v] \})$}
+            \State{$Q.PushAll(\{ \langle en_v, ex_u \rangle~|~en_v \in En[v], ex_u \in Ex[u] \})$}
+            \Comment{Добавление новых рёбер}
+            \State{$En[v] \gets En[v] \cup En[u]$}
+            \State{$Ex[v] \gets Ex[v] \cup Ex[u]$}
+            \State{$R[v] \gets \max(R[v], R[u]+1)$}
+            \State{$P[u] = v$}
+            \Comment{Объединение компонент}
         \EndFunction
     \EndStructure
     \end{algorithmic}
 \end{algorithm}
 
-\TODO: Дописать код
+За основу взята стандартная реализация \cite{Hopcroft1973} на подвешенные деревья, использующая обе эвристики: сжатие путей и ранговую. 
 
-За основу взята стандартная реализация \cite{Hopcroft1973}, использующая подвешенные деревья. 
-
-\TODO: \textit{Надо ли её расписывать?}
+% \TODO: \textit{Надо ли её расписывать?}
 
 Дополнительно в корнях хранятся списки всех начальных и конечных состояний компоненты. При добавлении ребра в операции \textit{Join} перебираются все пары начальная/конечная вершина из двух компонент и соответствующие им рёбра добавляются в рабочую очередь $Q$. 
-
-% To find new paths from start to final terminal quickly, we store for every set in $D$ all initial and final states in it. To get this information we use supporting methods $GetInitialStates()$ and $GetFinalStates()$. To get RSM box label by state id we use supporting method $GetLabelByState()$. To get all edges in grammar labeled with $S$ we use supporting method $GetEdgesByLabel()$. 
-
-% {\color{red}{TODO}}: rewrite in other notations
-
-% {\color{red}{TODO}}: write about dealing with eps-transitions.
 
 \TODO: (подумать) можно ли добавлять сразу много рёбер и сжимать их дфсом (как Борувка)?
 
 \subsection{Время работы}
 
 \begin{theorem}
-На РКА из $n$ состояний и $m^{*}$ рёбрах в транзитивном замыкании, Алгоритм НП отработает за время $\O(n + m* \alpha(m^{*} + n, n))$
+На РКА из $n$ состояний и $m^{*}$ рёбрах в транзитивном замыкании, Алгоритм НП отработает за время $\O(n + m^{*} \alpha(m^{*} + n, n))$
 \end{theorem}
 
 \begin{proof}
 ~\\
-\TODO: \textit{$m*$ джойнов, а проходы по спискам не долгие, так как каждый раз генерируем новое ребро}
+\TODO: \textit{$m^{*}$ джойнов, а проходы по спискам не долгие, так как каждый раз генерируем новое ребро}
 \end{proof}
 
 \subsection{Корректность для неориентированных графов и некоторых классов грамматик}
@@ -113,33 +127,57 @@
 
 \subsection{Корректность для двунаправленных графов и языка Дика}
 
-\begin{remark} \label{r1}
-    For bidirected graphs the Dyck-reachability relation forms an equivalence, i.e., for all bidirected graphs $G$, for every pair of nodes $u$m $v$, we have that $v$ is Dyck-reachable from $u$ iff $u$ is Dyck-reachable from $v$.
-\end{remark}
+\textit{Напоминание, что для языка Дика контекстно-свободная достижимость $\to$ Дикова достижимость}
 
-\begin{note}
-    Dyck language RSM-grammar box (there is only one).
-    
+Для доказательства потребуется следующее вспомогательное утверждение
+
+\begin{lemma}
+    Для вершин двунаправленных графов отношении Диковой достижимости является отношением эквивалентности.
+    % For bidirected graphs the Dyck-reachability relation forms an equivalence, i.e., for all bidirected graphs $G$, for every pair of nodes $u$, $v$, we have that $v$ is Dyck-reachable from $u$ iff $u$ is Dyck-reachable from $v$.
+\end{lemma}
+\begin{proof}
+~\\
+\TODO: ну тут тупо
+
+\end{proof}
+
+\begin{note}    
+    Для данного алгоритма будем использовать следующий вид грамматики для языка Дика:
+
+    $S \to \eps~|~SS~|~(_1 S )_1~|~ \dots ~|~(_k S )_k$
+
     \begin{figure}[H]
-        \includegraphics[width=\linewidth]{img/dyck_box.png}
+        \includegraphics[width=0.75\linewidth]{img/dyck_box.png}
+        \caption{РКА для языка Дика}
+        \label{img:dyck_rsm}
     \end{figure}
+
+    На рисунке~\ref{img:dyck_rsm} приведена РКА для данной грамматики. Заметим, что он содержит всего одну компоненту ($S$).
+
 \end{note}
 
 
 \begin{theorem}
-The Algorithm \ref{alg:UndirectodTensor} works correctly on bidirected graphs and Dyck grammars.
+Решение для CFPQ, использующее Алгоритм НП работает корректно на двунаправленных графах и языке Дика.
+% The Algorithm \ref{alg:UndirectodTensor} works correctly on bidirected graphs and Dyck grammars.
 \end{theorem}
 \begin{proof}
 
-We only need to prove, that for every pair $u, v \in V(\mathcal{G})$ there is a path $(q_s, u) \rightsquigarrow (q_{f_i}, v)$ in ({\bf directed}) Kronecker product $G \otimes \mathcal{G}$ 
-iff 
-there is such path $(q_s, u) \rightsquigarrow (q_{f_j}, v)$ in an {\bf undirected} product (there $q_s$ is the initial state and $q_{f_i}, q_{f_j}$ are some final states of $G$ respectively).
+Достаточно доказать, что для любой пары состояний $u \in En_i, v \in Ex_i$ существование неориентированного пути эквивалентно существованию ориентированного.
 
-$\Rightarrow$ 
+% We only need to prove, that for every pair $u, v \in V(\mathcal{G})$ there is a path $(q_s, u) \rightsquigarrow (q_{f_i}, v)$ in ({\bf directed}) Kronecker product $G \otimes \mathcal{G}$ 
+% iff 
+% there is such path $(q_s, u) \rightsquigarrow (q_{f_j}, v)$ in an {\bf undirected} product (there $q_s$ is the initial state and $q_{f_i}, q_{f_j}$ are some final states of $G$ respectively).
 
-Obviously (if $(q_{f}, v)$ is reachable from $(q_{s}, u)$ by directed edges, it is all the more reachable by undirected edges).
+$\Leftarrow$ (ориентированный $\SO$ неориентированный)
 
-$\Leftarrow$
+Очевидно, если есть ориентированный путь $u \path v$, то ровно если убрать ориентацию этот путь никуда не денется.
+
+% Obviously (if $(q_{f}, v)$ is reachable from $(q_{s}, u)$ by directed edges, it is all the more reachable by undirected edges).
+
+$\Rightarrow$ (неориентированный $\SO$ ориентированный)
+
+% Для начала
 
 At first, note that the Kronecker product $G \otimes \mathcal{G}$ forms some kind of a layered structure~--- $i$-th layer consists of vertices $(q_i, v)$, where $q_i$ is $i$-th RSM state. Because RSM is topologically sorted ({\color{red}{TODO}}), every edge $(q_i, u) \rightarrow (q_j, v)$ goes forward.
 

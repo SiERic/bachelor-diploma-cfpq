@@ -1,0 +1,101 @@
+% В этом шаблоне используется класс spbau-diploma. Его можно найти и, если требуется, 
+% поправить в файле spbau-diploma.cls
+\documentclass{spbau-diploma}
+
+% \let\mathdollar\relax
+% пакеты
+\usepackage{amsthm}
+\usepackage{amssymb}
+% \usepackage{mdsymbol}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{caption}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+% Основные математические символы
+\newcommand{\N}{\mathbb{N}}            % Natural numbers
+\newcommand{\R}{\mathbb{R}}            % Ratio numbers
+\newcommand{\Z}{\mathbb{Z}}            % Integer numbers
+\def\eps{\varepsilon}                  % eps
+\def\oo{\infty}                        % oo
+\def\SO{\Rightarrow}                   % =>
+\def\EQ{\Leftrightarrow}               % <=>
+\def\t{\texttt}                        % mono font
+\def\s{\textsc}                        % small capitals (for problem names)
+\def\c#1{{\rm\sc{#1}}}                 % font for classes \t{NP} etc
+\def\O{\mathcal{O}}                    % cool big O
+\def\NO{\t{\#}}                        % #
+\def\edge{\leftrightarrow}             % <->
+\def\to{\rightarrow}                   % ->
+\def\path{\rightsquigarrow}            % ~~>
+\def\su{\sum\limits}                   % sum
+\renewcommand{\le}{\leqslant}          % <=, beauty
+\renewcommand{\ge}{\geqslant}          % >=, beauty
+\newcommand{\q}[1]{\langle #1 \rangle} % <x>
+\newcommand{\cool}[1]{\mathcal{#1}}    % fancy letters
+\def\TODO{{\color{red}{\bf TODO}}}
+
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}{Лемма}[section]
+\newtheorem{example}{Пример}[section]
+\newtheorem{proposition}{Утверждение}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Замечание}
+\newtheorem*{note}{Замечание}
+
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[section]
+
+\begin{document}
+% Год, город, название университета и факультета предопределены,
+% но можно и поменять.
+% Если англоязычная титульная страница не нужна, то ее можно просто удалить.
+\filltitle{ru}{
+    chair              = {Кафедра математических и информационных технологий},
+    title              = {Пустое подмножество как замкнутое множество},
+    % Здесь указывается тип работы. Возможные значения:
+    %   coursework - Курсовая работа
+    %   diploma - Диплом специалиста
+    %   master - Диплом магистра
+    %   bachelor - Диплом бакалавра
+    type               = {master},
+    position           = {студента},
+    group              = 666,
+    author             = {Машкин Эдельвейс Захарович},
+    supervisorPosition = {д.\,ф.-м.\,н., профессор},
+    supervisor         = {Выбегалло А.\,А.},
+    reviewerPosition   = {ст. преп.},
+    reviewer           = {Привалов А.\,И.},
+    chairHeadPosition  = {д.\,ф.-м.\,н., профессор},
+    chairHead          = {Омельченко А.\,В.},
+    % university = {САНКТ-ПЕТЕРБУРГСКИЙ АКАДЕМИЧЕСКИЙ УНИВЕРСИТЕТ},
+    % faculty = {Центр высшего образования},
+    % city = {Санкт-Петербург},
+    % year             = {2013}
+}
+\filltitle{en}{
+    chair              = {Department of Mathematics and Information Technology},
+    title              = {Empty subset as closed set},
+    author             = {Edelweis Mashkin},
+    supervisorPosition = {professor},
+    supervisor         = {Amvrosy Vibegallo},
+    reviewerPosition   = {assistant},
+    reviewer           = {Alexander Privalov},
+    chairHeadPosition  = {professor},
+    chairHead          = {Alexander Omelchenko},
+}
+\maketitle
+\tableofcontents
+
+% \input{sections/abstract}
+\input{sections/introduction}
+\input{sections/literature_review}
+\input{sections/results}
+% \input{sections/conclusion}
+
+\bibliographystyle{ugost2008ls}
+\bibliography{diploma.bib}
+\end{document}

@@ -24,11 +24,11 @@
         \State{$D \gets$ DSU($|\bigcup\limits_{i=1}^k Q_i|$)}
         \For{$i \in 1..k$}
             \For{$u \xrightarrow{c} v \in \delta_i$}
-                \State{$Q.Push(\langle u, v, i \rangle)$}
+                \State{$Q.Push(\q{u, v, i})$}
             \EndFor
         \EndFor
         \While{$Q$ is not Empty}
-            \State{$\langle u, v, i \rangle \gets Q.Pop()$}
+            \State{$\q{u, v, i} \gets Q.Pop()$}
             \If{$u \in En_i \wedge v \in En_i$}
                 \Comment{Нашли новый путь}
                 \State{$A \gets A \cup getEdges(i, u, v)$}
@@ -89,8 +89,8 @@
                 \State{$Swap(u, v)$}
                 \Comment{Ранговая эвристика}
             \EndIf
-            \State{$Q.PushAll(\{ \langle en_u, ex_v \rangle~|~en_u \in En[u], ex_v \in Ex[v] \})$}
-            \State{$Q.PushAll(\{ \langle en_v, ex_u \rangle~|~en_v \in En[v], ex_u \in Ex[u] \})$}
+            \State{$Q.PushAll(\{ \q{en_u, ex_v}~|~en_u \in En[u], ex_v \in Ex[v] \})$}
+            \State{$Q.PushAll(\{ \q{en_v, ex_u}~|~en_v \in En[v], ex_u \in Ex[u] \})$}
             \Comment{Добавление новых рёбер}
             \State{$En[v] \gets En[v] \cup En[u]$}
             \State{$Ex[v] \gets Ex[v] \cup Ex[u]$}

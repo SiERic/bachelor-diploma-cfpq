@@ -63,10 +63,10 @@
 %% Теперь у нас будут переносы слов
 \usepackage{polyglossia}
 \setdefaultlanguage{russian}
-
+\SetLanguageKeys{russian}{indentfirst=true}
 
 %% Отступ в первом абзаце
-\usepackage{indentfirst}
+% \usepackage{indentfirst}
 %% Гиперссылки
 \usepackage[colorlinks=true,urlcolor=black,linkcolor=black,filecolor=black,citecolor=black]{hyperref}
 

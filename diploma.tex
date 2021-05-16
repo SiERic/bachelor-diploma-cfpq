@@ -1,8 +1,5 @@
-% В этом шаблоне используется класс spbau-diploma. Его можно найти и, если требуется, 
-% поправить в файле spbau-diploma.cls
 \documentclass{spbau-diploma}
 
-% \let\mathdollar\relax
 % пакеты
 \usepackage{amsthm}
 \usepackage{amssymb}
@@ -12,11 +9,14 @@
 \usepackage[singlelinecheck=false,justification=justified]{caption}
 \usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{fit,automata,positioning}
+\usetikzlibrary{decorations.pathmorphing}
+\tikzset{
+  snake it/.style={decorate, decoration=snake},
+  every state/.style={minimum size=0.3cm}}
 
 % Основные математические символы
-\newcommand{\N}{\mathbb{N}}            % Natural numbers
-\newcommand{\R}{\mathbb{R}}            % Ratio numbers
-\newcommand{\Z}{\mathbb{Z}}            % Integer numbers
 \def\eps{\varepsilon}                  % eps
 \def\oo{\infty}                        % oo
 \def\SO{\Rightarrow}                   % =>
@@ -34,6 +34,7 @@
 \renewcommand{\ge}{\geqslant}          % >=, beauty
 \newcommand{\q}[1]{\langle #1 \rangle} % <x>
 \newcommand{\cool}[1]{\mathcal{#1}}    % fancy letters
+
 \def\TODO{{\color{red}{\bf TODO}}}
 
 \newtheorem{theorem}{Теорема}[section]
@@ -46,9 +47,10 @@
 \newtheorem*{remark}{Замечание}
 \newtheorem*{note}{Замечание}
 
-
 \theoremstyle{definition}
 \newtheorem{definition}{Определение}[section]
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \begin{document}
 % Год, город, название университета и факультета предопределены,
@@ -93,6 +95,7 @@
 
 % \input{sections/abstract}
 \input{sections/introduction}
+% \input{sections/definitions}
 \input{sections/literature_review}
 \input{sections/tensor_product_algo}
 \input{sections/results}

@@ -114,11 +114,11 @@
             \State{$Q \gets$ Empty Queue}
             \For{$i \in 1..k$}
                 \For{$u \xrightarrow{c} v \in \delta_i$}
-                    \State{$Q.Push(\langle u, v, i \rangle)$}
+                    \State{$Q.Push(\q{u, v, i})$}
                 \EndFor
             \EndFor
             \While{$Q$ is not Empty}
-                \State{$\langle u, v, i \rangle \gets Q.Pop()$}
+                \State{$\q{u, v, i} \gets Q.Pop()$}
                 \If{$u \in En_i \wedge v \in En_i$}
                     \Comment{Нашли новый путь}
                     \State{$A \gets A \cup getEdges(i, u, v)$}
@@ -129,8 +129,8 @@
                     \If{$A_{x, u} \wedge \overline{A_{x, v}}$}
                         \For{$y \in Q_i$} 
                             \If{$A_{v, y} \wedge \overline{A_{x, y}}$}
-                                \State{$A \gets A \cup \langle x, y \rangle$}
-                                \State{$Q.Push(\langle x, y, i \rangle)$}
+                                \State{$A \gets A \cup \q{x, y}$}
+                                \State{$Q.Push(\q{x, y, i})$}
                                 \Comment{Обновлем транзитивное замыкание}
                             \EndIf
                         \EndFor

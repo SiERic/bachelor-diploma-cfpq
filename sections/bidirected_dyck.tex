@@ -131,7 +131,7 @@
 
 Для доказательства потребуется следующее вспомогательное утверждение
 
-\begin{lemma}
+\begin{lemma}\label{lemma:bidir_equiv}
     Для вершин двунаправленных графов отношении Диковой достижимости является отношением эквивалентности.
     % For bidirected graphs the Dyck-reachability relation forms an equivalence, i.e., for all bidirected graphs $G$, for every pair of nodes $u$, $v$, we have that $v$ is Dyck-reachable from $u$ iff $u$ is Dyck-reachable from $v$.
 \end{lemma}
@@ -147,7 +147,7 @@
     $S \to \eps~|~SS~|~(_1 S )_1~|~ \dots ~|~(_k S )_k$
 
     \begin{figure}[H]
-        \includegraphics[width=0.75\linewidth]{img/dyck_box.png}
+        \includegraphics[width=0.75\linewidth]{img/dyck_box}
         \caption{РКА для языка Дика}
         \label{img:dyck_rsm}
     \end{figure}
@@ -229,7 +229,7 @@ There can be three different types of labels on those edges:
         Combining this two paths ($a \xrightarrow{S} v$ and $v \xrightarrow{S} z$) we get $a \xrightarrow{SS} z \Rightarrow a \xrightarrow{S} z$~--- desired path.
         
     \begin{figure}[H]
-        \includegraphics[width=\linewidth]{img/th_proof_img.png}
+        \includegraphics[width=\linewidth]{img/th_proof_img}
     \end{figure}
 \end{itemize}
 

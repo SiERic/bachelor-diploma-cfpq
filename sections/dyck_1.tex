@@ -1,6 +1,10 @@
 \subsection{Алгоритм для языка Дика на одном типе скобок}
 
-\TODO: написать там, где даётся определение языка Дика про пути Дика
+\begin{note}
+  Строки, принадлежащие языку Дика $\cool{D}_1$ часто изображают в виде так называемых \textit{путей Дика}~--- путей из точки $(0, 0)$ в точку $(0, 2n)$, не опускающихся ниже оси абсцисс. Открывающей скобке соответствует вектор $(1, 1)$, закрывающей~--- $(1, -1)$.
+
+  \TODO: Картинка 
+\end{note}
 
 \TODO: для semi-dyck тоже работает, нужно это упомянуть
 
@@ -72,27 +76,27 @@ $S \to \eps~|~U_0 S D_0~|~U_1 S D_1~|~ \dots ~|~U_K S D_K~|~S^*$
 
 \begin{figure}[H]
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase0.png}} 0 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase0}} 0 итерация
     \end{minipage}
     \hfill
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase1.png}} 1 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase1}} 1 итерация
     \end{minipage}
     \vfill
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase2.png}} 2 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase2}} 2 итерация
     \end{minipage}
     \hfill
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase3.png}} 3 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase3}} 3 итерация
     \end{minipage}
     \vfill
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase4.png}} 4 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase4}} 4 итерация
     \end{minipage}
     \hfill
     \begin{minipage}[h]{0.47\linewidth}
-        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase5.png}} 5 итерация
+        \center{\includegraphics[width=1\linewidth]{img/dyck1_example/phase5}} 5 итерация
     \end{minipage}
 
     \caption{Пример работы алгоритма (на конкретном пути)}

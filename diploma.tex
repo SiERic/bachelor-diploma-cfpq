@@ -18,6 +18,7 @@
 
 \usepackage{perpage}
 \MakePerPage{footnote}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % Основные математические символы
 \def\eps{\varepsilon}                  % eps
@@ -52,8 +53,6 @@
 
 \theoremstyle{definition}
 \newtheorem{definition}{Определение}[section]
-
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \begin{document}
 % Год, город, название университета и факультета предопределены,

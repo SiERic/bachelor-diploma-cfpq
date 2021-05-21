@@ -22,70 +22,68 @@
   \textit{Ориентированный помеченный граф} (или \textit{граф с метками})~--- это тройка $G = \q{V, E, \Sigma}$, где $V$~--- множество вершин, $\Sigma$~--- множество меток, \\$E \subseteq V \times V \times \Sigma$~--- множество рёбер. 
 
   Неформально, это мультиграф, каждому ребру которого сопоставлена метка из алфавита $\Sigma$.
-
 \end{definition}
-  \begin{figure}[H]
-    \begin{minipage}[h]{0.5\linewidth}
+
+\begin{figure}[H]
+  \begin{minipage}[h]{0.5\linewidth}
+    \begin{tikzpicture}[shorten >=1pt, auto]
+      \node[state] (q_0)                      {$0$};
+      \node[state] (q_1) [above right=of q_0] {$1$};
+      \node[state] (q_2) [right=of q_0]       {$2$};
+      \node[state] (q_3) [right=of q_2]       {$3$};
+      \path[->]
+        (q_0) edge node {$a$} (q_1)
+        (q_1) edge node {$a$} (q_2)
+        (q_2) edge node {$a$} (q_0)
+        (q_2) edge[bend left, above]  node {$b$} (q_3)
+        (q_3) edge[bend left, below]  node {$b$} (q_2);
+    \end{tikzpicture}
+    \caption{Помеченный граф с $\Sigma = \{ a, b \}$}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[h]{0.5\linewidth} 
       \begin{tikzpicture}[shorten >=1pt, auto]
         \node[state] (q_0)                      {$0$};
         \node[state] (q_1) [above right=of q_0] {$1$};
         \node[state] (q_2) [right=of q_0]       {$2$};
         \node[state] (q_3) [right=of q_2]       {$3$};
         \path[->]
-          (q_0) edge node {$a$} (q_1)
-          (q_1) edge node {$a$} (q_2)
+          (q_0) edge[ultra thick] node {$a$} (q_1)
+          (q_1) edge[ultra thick] node {$a$} (q_2)
           (q_2) edge node {$a$} (q_0)
-          (q_2) edge[bend left, above]  node {$b$} (q_3)
-          (q_3) edge[bend left, below]  node {$b$} (q_2);
+          (q_2) edge[bend left, above, ultra thick]  node {$b$} (q_3)
+          (q_3) edge[bend left, below, ultra thick]  node {$b$} (q_2);
       \end{tikzpicture}
-      \caption{Помеченный граф с $\Sigma = \{ a, b \}$}
+      \caption{На пути $v_0 \to v_1 \to v_2 \to v_3 \to v_2$\\ читается слово $aabb$}
     \end{minipage}
-    \hfill
-    \begin{minipage}[h]{0.5\linewidth} 
-        \begin{tikzpicture}[shorten >=1pt, auto]
-          \node[state] (q_0)                      {$0$};
-          \node[state] (q_1) [above right=of q_0] {$1$};
-          \node[state] (q_2) [right=of q_0]       {$2$};
-          \node[state] (q_3) [right=of q_2]       {$3$};
-          \path[->]
-            (q_0) edge[ultra thick] node {$a$} (q_1)
-            (q_1) edge[ultra thick] node {$a$} (q_2)
-            (q_2) edge node {$a$} (q_0)
-            (q_2) edge[bend left, above, ultra thick]  node {$b$} (q_3)
-            (q_3) edge[bend left, below, ultra thick]  node {$b$} (q_2);
-        \end{tikzpicture}
-        \caption{На пути $v_0 \to v_1 \to v_2 \to v_3 \to v_2$\\ читается слово $aabb$}
-      \end{minipage}
-      \label{tikz:labeled_graph}
-  \end{figure}
+    \label{tikz:labeled_graph}
+\end{figure}
 
 
 \begin{definition}
-Будем говорить, что слово $w$ \textit{читается} на пути $p$, если конкатенация меток вдоль $p$ образует $w$. 
+  Будем говорить, что слово $w$ \textit{читается} на пути $p$, если конкатенация меток вдоль $p$ образует $w$. 
 \end{definition}
 
 % Контекстно-свободная грамматика
 \begin{definition}
-\textit{Контекстно-свободная грамматика}~--- это четвёрка $\q{\Sigma, N, S, P}$:
-\begin{itemize}
-  \setlength\itemsep{-0.1em}
-  \item $\Sigma$~--- конечный алфавит
-  \item $N$~--- конечное множество нетерминалов
-  \item $S \in N$~--- стартовый нетерминал
-  \item $P$~--- конечное множество продукций (правил вывода), имеющих вид\\ $N_i \to \alpha$, где $N_i \in N, \alpha \in (\Sigma \cup N)^{*}$
-\end{itemize}
+  \textit{Контекстно-свободная грамматика}~--- это четвёрка $\q{\Sigma, N, S, P}$:
+  \vspace{-\topsep}
+  \begin{itemize}
+    \setlength\itemsep{-0.1em}
+    \item $\Sigma$~--- конечный алфавит
+    \item $N$~--- конечное множество нетерминалов
+    \item $S \in N$~--- стартовый нетерминал
+    \item $P$~--- конечное множество продукций (правил вывода), имеющих вид\\ $N_i \to \alpha$, где $N_i \in N, \alpha \in (\Sigma \cup N)^{*}$
+  \end{itemize}
+
+  Язык, распознаваемый грамматикой $\cool{G}$~--- язык $L(G)$ слов, выводимых из стартового нетерминала.
+
+  Контекстно-свободная грамматика задаёт \textit{контекстно-свободный язык}.
 \end{definition}
 
 \TODO: пример
 
 \TODO: в примере пояснить, что такое $\eps$
-
-% Контекстно-свободный язык
-\begin{definition}
-\textit{Контекстно-свободный язык}~--- язык слов, распознаваемых контекстно-свободной грамматикой.
-
-Для данной контекстно-свободной грамматики $\cool{G}$, соответствующий ей язык обозначается как $L(\cool{G})$. 
-\end{definition}
 
 Теперь определим саму задачу.
 

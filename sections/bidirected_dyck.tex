@@ -219,46 +219,50 @@
   \begin{itemize}
     \item открывающая скобка $(_k$
 
-      \textit{$p \colon (q_1, u) \rightarrow (q_{4/7}, v) \rightarrow (q_1, w) \rightarrow \dots \rightarrow (q_f, z)$.}
+      $p \colon (q_1, u) \rightarrow (q_{4/7}, v) \rightarrow (q_1, w) \rightarrow \dots \rightarrow (q_f, z)$.
 
-      Рёбра с меткой $(_k$ соответствуют рёбрам входного графа, а именно рёбрам $u \xrightarrow{(_k)} v$ и $w \xrightarrow{(_k)} v$. Заметим, что тогда (по двунаправленности графа) существует путь $(_k )_k$ из $u$ в $w$, а значит существует $S$-ребро $\q{q_1, u} \to \q{q_2, w}$. Также, по предположению индукции существует простой путь $\q{q_1, w} \to \q{q_f, z}$, а значит есть и $S$-ребро $\q{q_2, w} \to \q{q_3, z}$. Вместе эти два ребра формируют просто путь $\q{q_1, u} \to \q{q_2, w} \to \q{q_3, z}$, что и хотелось.
+      Рёбра с меткой $(_k$ соответствуют рёбрам входного графа, а именно рёбрам $u \xrightarrow{(_k)} v$ и $w \xrightarrow{(_k)} v$. Заметим, что тогда, по двунаправленности графа, существует и ребро $v \xrightarrow{)_k} w$, дающее вместе с ребром $u \xrightarrow{(_k)} v $ путь $(_k )_k$ из $u$ в $w$, порождающий $S$-ребро $\q{q_1, u} \to \q{q_2, w}$. Также, по предположению индукции существует простой путь $\q{q_1, w} \to \q{q_f, z}$, а значит есть и $S$-ребро $\q{q_2, w} \to \q{q_3, z}$. Вместе эти два ребра формируют просто путь $\q{q_1, u} \to \q{q_2, w} \to \q{q_3, z}$, что и хотелось.
 
-      % Так как рёбра с меткой $(_{1/2}$ выходят только из начального слоя
+    \item $S$-метки
+
+      $p \colon (q_1, a) \rightarrow \dots \rightarrow (q_i, u) \rightarrow (q_j, v) \rightarrow (q_i, w) \rightarrow \dots \rightarrow (q_f, z)$.
+
+      По лемме~\ref{lemma:bidir_equiv}, из наличия дикового пути $w \path v$ следует наличие дикового пути $v \path w$. Вместе два диковых пути $u \path v$ и $v \path w$ образуют один путь $u \path w$. 
+
+      Сожмём этот путь в одну вершину $uw$. Получим более короткий путь, для него по предположению индукции существует аналогичный простой путь. Если этот простой путь не проходит через вершину $uw$, то он и является ответом. Иначе. Если вершина $uw$ находится на 2, 4 или 7 слое, то следующее за ней ребро в простом пути имеет метку $S$, а значит, вместе с диковым путём $u \path w$ собирается в один диков путь (по правилу $S \to SS$, как в случае $(_k$). Если же $uw$ находится на 1 слое, то весь путь от неё до $z$~--- один диков путь, который так же складывается с путём $u \path w$.  
+
+      % $\mathcal{G}$ contains $S$-labeled edges $u \xrightarrow{S} v$ and $w \xrightarrow{S} v$. Since $\mathcal{G}$ is bidirected, then by \ref{r1} $v \xrightarrow{S} u$ and $v \xrightarrow{S} w$. Combining $u \xrightarrow{S} v$ and $v \xrightarrow{S} w$ we get that $u \xrightarrow{S} w$. 
+
+      % No we want to sort of contract this edge, joining $u$ and $w$ (on the $j$-th level). Then we can get (by induction hypothesis) the directed path from $(q_0, a) \rightsquigarrow (q_f, z)$. If new path does not contain joined $uw$ vertex, then that's the answer. Otherwise we can split this vertex back, inserting between $u$ and $w$ the $S$-labeled path (that one, from $u \xrightarrow{S} w$ edge). We can do it, because the both of these paths form correctly matched parenthesis ({\color{red}{TODO}}: we can prove this using stack-based checking algorithm).
+
+      % \textit{Two other cases can be proved the same way, but I find it a little dishonest}
+
+    \item закрывающая скобка $)_k$
+
+      $p \colon (q_1, a) \rightarrow \dots \rightarrow (q_i, u) \rightarrow (q_f, v) \rightarrow (q_i, w) \rightarrow \dots \rightarrow (q_f', z)$.
 
       % Since $\alpha_l$-labeled edges could only be added on the initialization stage, 
-      % graph $\mathcal{G}$ contains edges $u \xrightarrow{\alpha_l} v$ and $w \xrightarrow{\alpha_l} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\overline{\alpha_l}} u$ and $v \xrightarrow{\overline{\alpha_l}} w$.
+      % graph $\mathcal{G}$ contains edges $u \xrightarrow{\overline{\alpha_l}} v$ and $w \xrightarrow{\overline{\alpha_l}} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\alpha_l} u$ and $v \xrightarrow{\alpha_l} w$.
 
-      % Now we can notice, that $w$ is Dyck-reachable (by the path $\alpha_l \overline{\alpha_l}$) from $u$, so there is an $S$-labeled edge from $u$ to $w$. We can also conclude, that (by induction) there is a directed path from $(q_0, w)$ to $(q_f, z)$ (there $z$ is the end of the path and $q_f$ is some final state of $G$), so there is an $S$-labeled edge from $w$ to $z$. 
+      По предположению индукции, существует простой путь $a \path v$, так что есть $S$-ребро $\q{q_1, a} \to \q{q_2, v}$. Поймём, почему будет и ребро $\q{q_2, v} \to \q{q_3, z}$, которое вместе с предыдущем даёт искомый простой путь.
 
-      % Using this two observation we can construct a directed path from $u$ to $z$: $u \xrightarrow{S} w \xrightarrow{S} z$. 
-    \item $S$-label
+      По двунаправленности графа, из наличия ребра $w \xrightarrow{)_k} v$ следует наличие ребра $v \xrightarrow{(_k)} w$. Вместе с изначальным $\eps$-ребром $w \xrightarrow{S} w$ и остатком пути $\q{q_i, w} \path \q{q_f', z}$ получаем более короткий путь, для которого, по предположению индукции существует аналогичный простой путь. Он и порождает второе ребро $\q{q_2, w} \to \q{q_3, z}$. 
 
-      \textit{path: $(q_0, a) \rightarrow \dots \rightarrow (q_j, u) \rightarrow (q_i, v) \rightarrow (q_j, w) \rightarrow \dots \rightarrow (q_f, z)$.}
+      % By induction, we get that $a \xrightarrow{S} v$. Now we will construct a second part of the path: $(q_0, v) \xrightarrow{\alpha_l} (q_{j-1}, w) \xrightarrow{S} (q_j, w) \rightsquigarrow (q_f, z)$ ($q_{j-1}, w) \xrightarrow{S} (q_j, w)$ ~--- initial $S$-loop). By induction, we have directed simple version of this path, so $v \xrightarrow{S} z$. 
 
-      $\mathcal{G}$ contains $S$-labeled edges $u \xrightarrow{S} v$ and $w \xrightarrow{S} v$. Since $\mathcal{G}$ is bidirected, then by \ref{r1} $v \xrightarrow{S} u$ and $v \xrightarrow{S} w$. Combining $u \xrightarrow{S} v$ and $v \xrightarrow{S} w$ we get that $u \xrightarrow{S} w$. 
+      % Combining this two paths ($a \xrightarrow{S} v$ and $v \xrightarrow{S} z$) we get $a \xrightarrow{SS} z \Rightarrow a \xrightarrow{S} z$~--- desired path.
 
-      No we want to sort of contract this edge, joining $u$ and $w$ (on the $j$-th level). Then we can get (by induction hypothesis) the directed path from $(q_0, a) \rightsquigarrow (q_f, z)$. If new path does not contain joined $uw$ vertex, then that's the answer. Otherwise we can split this vertex back, inserting between $u$ and $w$ the $S$-labeled path (that one, from $u \xrightarrow{S} w$ edge). We can do it, because the both of these paths form correctly matched parenthesis ({\color{red}{TODO}}: we can prove this using stack-based checking algorithm).
-
-      \textit{Two other cases can be proved the same way, but I find it a little dishonest}
-
-    \item $\overline{\alpha_l}$-label
-
-      \textit{path: $(q_0, a) \rightarrow \dots \rightarrow (q_j, u) \rightarrow (q_f, v) \rightarrow (q_j, w) \rightarrow \dots \rightarrow (q_f, z)$.}
-
-      Since $\alpha_l$-labeled edges could only be added on the initialization stage, 
-      graph $\mathcal{G}$ contains edges $u \xrightarrow{\overline{\alpha_l}} v$ and $w \xrightarrow{\overline{\alpha_l}} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\alpha_l} u$ and $v \xrightarrow{\alpha_l} w$.
-
-      By induction, we get that $a \xrightarrow{S} v$. Now we will construct a second part of the path: $(q_0, v) \xrightarrow{\alpha_l} (q_{j-1}, w) \xrightarrow{S} (q_j, w) \rightsquigarrow (q_f, z)$ ($q_{j-1}, w) \xrightarrow{S} (q_j, w)$ ~--- initial $S$-loop). By induction, we have directed simple version of this path, so $v \xrightarrow{S} z$. 
-
-      Combining this two paths ($a \xrightarrow{S} v$ and $v \xrightarrow{S} z$) we get $a \xrightarrow{SS} z \Rightarrow a \xrightarrow{S} z$~--- desired path.
-        
     \begin{figure}[H]
         \includegraphics[width=\linewidth]{img/th_proof_img}
     \end{figure}
+
+    \TODO: норм картинка
   \end{itemize}
 
 \end{proof}
 
 \subsection{Выводы и результаты по главе}
+
+\includegraphics[width=0.75\linewidth]{img/hole}
 
 \TODO

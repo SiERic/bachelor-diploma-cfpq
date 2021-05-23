@@ -20,7 +20,7 @@
 
 В листинге~\ref{algo:NP} приведён псевдокод алгоритма.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h]
   \floatname{algorithm}{Listing}
   \begin{algorithmic}[1]
   \caption{Алгоритм достижимости для РКА, основанный на неориентированном ИТЗ}
@@ -57,7 +57,7 @@
 [1]{{\bf Structure} #1}
 {}
 
-\begin{algorithm}[H]
+\begin{algorithm}[h]
   \floatname{algorithm}{Listing}
   \begin{algorithmic}[1]
   \caption{Система Непересекающихся Множеств}
@@ -127,7 +127,7 @@
 \begin{proof}
   Как и в алгоритме~\ref{algo:PI} проход по внешнему циклу и добавление новых рекурсивных рёбер отработает за $\O(|E^{*}|)$, так как каждое ребро транзитивного замыкания рассмотрится не более одного раза.
 
-  Осталось оценить время работы $|E^{*}|$ вызовов функции \textit{Union}. Каждый из них совершает 2 вызова функции \textit{Find}, каждый из которых отработает за амортизированное $\alpha(|V|)$. Также, если вершины находились в разных компонентах, происходит перебор всех пар начальное-конечное состояние. Однако, этот перебор суммарно переберёт каждое ребро транзитивного замыкания не более одного раза, так что суммарно отработает за $\O(|E^{*}|)$.
+  Осталось оценить время работы $|E^{*}|$ вызовов функции \textit{Union}. Каждый из них совершает 2 вызова функции \textit{Find}, каждый из которых отработает за амортизированное $\O(\alpha(|V|))$. Также, если вершины находились в разных компонентах, происходит перебор всех пар начальное-конечное состояние. Однако, этот перебор суммарно переберёт каждое ребро транзитивного замыкания не более одного раза, так что суммарно отработает за $\O(|E^{*}|)$.
 
   Итого, время работы алгоритма составляет $\O(|V| + |E^{*}| \alpha(|V|))$ ($\O(|V|)$ берётся из создания СНМ на $|V|$ множеств). 
 \end{proof}
@@ -138,87 +138,99 @@
 
 \subsection{Корректность для двунаправленных графов и языка Дика}
 
-\textit{Напоминание, что для языка Дика контекстно-свободная достижимость $\to$ Дикова достижимость}
+\begin{theorem}\label{th:bidir_corr}
+  Алгоритм~\ref{algo:NP} работает корректно на двунаправленных графах и языке Дика.
+\end{theorem}
 
-Для доказательства потребуется следующее вспомогательное утверждение
+% \textit{Напоминание, что для языка Дика контекстно-свободная достижимость $\to$ Дикова достижимость}
+
+Для доказательства потребуется следующее вспомогательное утверждение:
 
 \begin{lemma}\label{lemma:bidir_equiv}
   Для вершин двунаправленных графов отношении Диковой достижимости является отношением эквивалентности.
   % For bidirected graphs the Dyck-reachability relation forms an equivalence, i.e., for all bidirected graphs $G$, for every pair of nodes $u$, $v$, we have that $v$ is Dyck-reachable from $u$ iff $u$ is Dyck-reachable from $v$.
 \end{lemma}
 \begin{proof}
-  ~\\
-  \TODO: ну тут тупо
+
+  Действительно, если инвертировать (заменить все $(_i$ на $)_i$ и наоборот) и развернуть правильную скобочную последовательность, то получится так же правильная скобочная последовательность.\\
+  Пример: ПСП: `\texttt{([]())}' $\to$ развёрнутая: `\texttt{))(][(}' $\to$ инвертированная: `\texttt{(()[])}'.
 
 \end{proof}
 
-\begin{note}    
-  Для данного алгоритма будем использовать следующий вид грамматики для языка Дика:
+\begin{note}
+  В доказательстве для простоты будет рассматриваться язык Дика $\cool{D}_2$ (на двух типах скобок). Все рассуждения обобщаются на случай $k$ типов скобок.
+\end{note}
 
-  $S \to \eps~|~SS~|~(_1 S )_1~|~ \dots ~|~(_k S )_k$
+\begin{note}    
+  Для данного алгоритма будем использовать нестандартный РКА для языка Дика (изображён на рис.~\ref{img:dyck_rsm})
 
   \begin{figure}[H]
-      \includegraphics[width=0.75\linewidth]{img/dyck_box}
-      \caption{РКА для языка Дика}
+      \includegraphics[width=0.75\linewidth]{img/dyck_rsm}
+      \caption{РКА для языка Дика $\cool{D}_2$.\\ Заметим, что он содержит всего одну компоненту.}
       \label{img:dyck_rsm}
   \end{figure}
 
-  На рисунке~\ref{img:dyck_rsm} приведена РКА для данной грамматики. Заметим, что он содержит всего одну компоненту ($S$).
-
-  \TODO: нарисовать красиво
+  \TODO: нарисовать красиво (+ eps переход)
 
 \end{note}
 
+\begin{proof}{Теоремы~\ref{th:bidir_corr}}
 
-\begin{theorem}
-  Решение для CFPQ, использующее Алгоритм НП, работает корректно на двунаправленных графах и языке Дика.
-\end{theorem}
-
-\begin{proof}
-
-  Достаточно доказать, что для любой пары состояний $u \in En_i, v \in Ex_i$ существование неориентированного пути эквивалентно существованию ориентированного.
-
-  % We only need to prove, that for every pair $u, v \in V(\mathcal{G})$ there is a path $(q_s, u) \rightsquigarrow (q_{f_i}, v)$ in ({\bf directed}) Kronecker product $G \otimes \mathcal{G}$ 
-  % iff 
-  % there is such path $(q_s, u) \rightsquigarrow (q_{f_j}, v)$ in an {\bf undirected} product (there $q_s$ is the initial state and $q_{f_i}, q_{f_j}$ are some final states of $G$ respectively).
+  Достаточно доказать, что для любой пары состояний $e \in En_i, ex \in Ex_i$ существование неориентированного пути эквивалентно существованию ориентированного.
 
   $\Leftarrow$ (ориентированный $\SO$ неориентированный)
 
-  Очевидно, если есть ориентированный путь $u \path v$, то ровно если убрать ориентацию этот путь никуда не денется.
-
-  % Obviously (if $(q_{f}, v)$ is reachable from $(q_{s}, u)$ by directed edges, it is all the more reachable by undirected edges).
+  Очевидно, если есть ориентированный путь $en \path ex$, то если убрать ориентацию этот путь всё ещё останется корректным.
 
   $\Rightarrow$ (неориентированный $\SO$ ориентированный)
 
-  % Для начала
+  Для начала заметим, что компонента нашего РКА (произведения РКА языка Дика и входного графа) образует слоистую структуру: на $i$-ом слое~--- состояния $\q{q_i, u}$, где $q_i$~--- $i$-ое состояние РКА языка Дика. Т.к. РКА Дика топологически отсортирован, все рёбра ведут из слоя с меньшим номером в слой с большим.
 
-  At first, note that the Kronecker product $G \otimes \mathcal{G}$ forms some kind of a layered structure~--- $i$-th layer consists of vertices $(q_i, v)$, where $q_i$ is $i$-th RSM state. Because RSM is topologically sorted ({\color{red}{TODO}}), every edge $(q_i, u) \rightarrow (q_j, v)$ goes forward.
+  % At first, note that the Kronecker product $G \otimes \mathcal{G}$ forms some kind of a layered structure~--- $i$-th layer consists of vertices $(q_i, v)$, where $q_i$ is $i$-th RSM state. Because RSM is topologically sorted ({\color{red}{TODO}}), every edge $(q_i, u) \rightarrow (q_j, v)$ goes forward.
 
-  We will call path \textit{simple} if it visits every layer no more than once.
+  Назовём неориентированный путь \textit{простым}, если он проходит по каждому слою не боле одного раза.
 
-  We prove the claim by induction on the $l$ (path length).
+  Пусть есть неориентированный путь $p \colon en \path ex$. Покажем, что тогда существует \textit{простой} путь $p' n en \path ex$. Заметим, что так как рёбра идут только из слоя с меньшим номером в слой с большим, то простой путь из первого слоя в последний на самом деле направлен согласно исходной ориентации рёбер. Т.е. такой простой путь и будет искомым.
 
-  Clearly the result is true for $l \le 3$, because the only way to achive final vertex in $1, 2$ or $3$ edges is by a simple vertical path (which exists in the original graph too).
+  Доказывать это утверждение (про наличие простого пути $p'$) будем индукцией по длине пути.
 
-  Otherwise (if $l \ge 4$), path is not simple. 
+  % We will call path \textit{simple} if it visits every layer no more than once.
 
-  Consider the first flex point of the path, that is the vertex $(q_i, v)$ such that edges $(q_j, u) \rightarrow (q_i, v)$ and $(q_i, v) \rightarrow (q_k, w)$ are in the path and $j, k \le i$ (so, the path is convex at this point).
+  % We prove the claim by induction on the $l$ (path length).
 
-  Looking at the grammar graph we can notice, that every state has indegree $\le 1$. So at the flex point there are actually two same-labeled edges (that is, $j = k$). 
+  Очевидно, утверждение верно для путей длины 1, 2 и 3~--- все они и так являются простыми.
 
-  There can be three different types of labels on those edges:
+  Рассмотрим путь $p$ длины $\ge 4$, он уже не будет простым. Найдём первую \textit{точку перегиба} пути~--- вершину, из который путь идёт в состояние на слое с меньшим номером.
+
+  % Clearly the result is true for $l \le 3$, because the only way to achive final vertex in $1, 2$ or $3$ edges is by a simple vertical path (which exists in the original graph too).
+
+  % Otherwise (if $l \ge 4$), path is not simple. 
+
+  % Consider the first flex point of the path, that is the vertex $(q_i, v)$ such that edges $(q_j, u) \rightarrow (q_i, v)$ and $(q_i, v) \rightarrow (q_k, w)$ are in the path and $j, k \le i$ (so, the path is convex at this point).
+
+  Внимательно посмотрев на РКА языка Дика, можно заметить, что все состояния имеют входящую степень 1 (для этого и нужен был нестандартный вид), так что рёбра, соседствующие в пути $p$ с точкой перегиба имеют одинаковую метку и идут на один и тот же уровень. Обозначим эти рёбра как $\q{q_i, u} \to \q{q_j, v} \to \q{q_i, w}$ ($\q{q_j, v}$~--- точка перегиба).
+
+  Рассмотрим все 3 варианта возможной метки на рёбрах вокруг точки перегиба.
+
+  % Looking at the grammar graph we can notice, that every state has indegree $\le 1$. So at the flex point there are actually two same-labeled edges (that is, $j = k$). 
+
+  % There can be three different types of labels on those edges:
 
   \begin{itemize}
-    \item $\alpha_l$-label
+    \item открывающая скобка $(_k$
 
-      \textit{path: $(q_0, u) \rightarrow (q_i, v) \rightarrow (q_0, w) \rightarrow \dots \rightarrow (q_f, z)$.}
+      \textit{$p \colon (q_1, u) \rightarrow (q_{4/7}, v) \rightarrow (q_1, w) \rightarrow \dots \rightarrow (q_f, z)$.}
 
-      Since $\alpha_l$-labeled edges could only be added on the initialization stage, 
-      graph $\mathcal{G}$ contains edges $u \xrightarrow{\alpha_l} v$ and $w \xrightarrow{\alpha_l} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\overline{\alpha_l}} u$ and $v \xrightarrow{\overline{\alpha_l}} w$.
+      Рёбра с меткой $(_k$ соответствуют рёбрам входного графа, а именно рёбрам $u \xrightarrow{(_k)} v$ и $w \xrightarrow{(_k)} v$. Заметим, что тогда (по двунаправленности графа) существует путь $(_k )_k$ из $u$ в $w$, а значит существует $S$-ребро $\q{q_1, u} \to \q{q_2, w}$. Также, по предположению индукции существует простой путь $\q{q_1, w} \to \q{q_f, z}$, а значит есть и $S$-ребро $\q{q_2, w} \to \q{q_3, z}$. Вместе эти два ребра формируют просто путь $\q{q_1, u} \to \q{q_2, w} \to \q{q_3, z}$, что и хотелось.
 
-      Now we can notice, that $w$ is Dyck-reachable (by the path $\alpha_l \overline{\alpha_l}$) from $u$, so there is an $S$-labeled edge from $u$ to $w$. We can also conclude, that (by induction) there is a directed path from $(q_0, w)$ to $(q_f, z)$ (there $z$ is the end of the path and $q_f$ is some final state of $G$), so there is an $S$-labeled edge from $w$ to $z$. 
+      % Так как рёбра с меткой $(_{1/2}$ выходят только из начального слоя
 
-      Using this two observation we can construct a directed path from $u$ to $z$: $u \xrightarrow{S} w \xrightarrow{S} z$. 
+      % Since $\alpha_l$-labeled edges could only be added on the initialization stage, 
+      % graph $\mathcal{G}$ contains edges $u \xrightarrow{\alpha_l} v$ and $w \xrightarrow{\alpha_l} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\overline{\alpha_l}} u$ and $v \xrightarrow{\overline{\alpha_l}} w$.
+
+      % Now we can notice, that $w$ is Dyck-reachable (by the path $\alpha_l \overline{\alpha_l}$) from $u$, so there is an $S$-labeled edge from $u$ to $w$. We can also conclude, that (by induction) there is a directed path from $(q_0, w)$ to $(q_f, z)$ (there $z$ is the end of the path and $q_f$ is some final state of $G$), so there is an $S$-labeled edge from $w$ to $z$. 
+
+      % Using this two observation we can construct a directed path from $u$ to $z$: $u \xrightarrow{S} w \xrightarrow{S} z$. 
     \item $S$-label
 
       \textit{path: $(q_0, a) \rightarrow \dots \rightarrow (q_j, u) \rightarrow (q_i, v) \rightarrow (q_j, w) \rightarrow \dots \rightarrow (q_f, z)$.}

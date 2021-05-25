@@ -80,39 +80,97 @@
   Контекстно-свободная грамматика задаёт \textit{контекстно-свободный язык}.
 \end{definition}
 
-\TODO: пример
+\begin{example}
+  Опишем грамматику $\cool{G} = \q{\Sigma, N, S, P}$, задающую язык $L(\cool{G})$ слов вида $b^n a^m b^{2n}$
 
-\TODO: в примере пояснить, что такое $\eps$
+  Алфавит состоит из букв $a$ и $b$: $\Sigma = \{ a, b \}$, нетерминалов будет два: $S$~-- стартовый нетерминал и $A$~--- нетерминал для слов вида $a^m$. Также вывода слов в грамматике будут следующие продукции:
+
+  \begin{align*}
+    &S \to b S bb \\
+    &S \to A \\
+    &A \to a A \\
+    &A \to \eps
+  \end{align*}
+
+  где $\eps$~--- пустое слово.
+
+  Продукции для одного терминала иногда пишут через $|$ (логическое или), так что короткая запись грамматики для $L$ выглядит так:
+
+  \begin{align*}
+    L : &S ::= b S bb ~|~ A \\
+    &A ::= aA ~|~ \eps
+  \end{align*}
+
+  Покажем, как в такой грамматике вывести слово `$bb\,aaa\,bbbb$':\\ $S \SO b\,S\,bb \SO  b\,b\,S\,bb\,bb \SO bb\,A\,bbbb \SO bb\,aA\,bbbb \SO bb\,aaA\,bbbb \SO bb\,aaaA\,bbbb \SO bb\,aaa\,bbbb$
+
+\end{example}
 
 Теперь определим саму задачу.
 
 % Задача поиска путей с контекстно-свободными ограничениями
 \begin{definition}
-  Дан ориентированный помеченный граф $G$ и контекстно-свободная грамматика $\cool{G}$ над тем же алфавитом.
+  Пусть даны ориентированный помеченный граф $G$ и контекстно-свободная грамматика $\cool{G}$ над тем же алфавитом.
 
-  \textit{Задача поиска путей с контекстно-свободными ограничениями (CFPQ)}\footnote{В реляционной семантике~\cite{Hellings16}} заключается в нахождении всех пар вершин $u, v \in V(G)$, таких что существует путь $p: u \path v$, на котором читается слово $w \in L(\cool{G})$.
+  \textit{Задача поиска путей с контекстно-свободными ограничениями (CFPQ)}\footnote{В реляционной семантике запроса~\cite{Hellings16}} заключается в нахождении всех пар вершин $u, v \in V(G)$, таких что существует путь $p: u \path v$, на котором читается слово $w \in L(\cool{G})$.
+
+  Например, для графа на рис.~\ref{img:path_0_2} и~\ref{img:path_3_1} показаны корректный и некорректный путь для языка $L : S ::= aSb ~|~ \eps$ слов $a^n b^n$.
+
+  Корректным также будет являться и непростой путь $v_2 \to v_0 \to v_1 \to v_2 \to v_0 \to v_1 \to v_3 \to v_2 \to v_3 \to v_2 \to v_3 \to v_2$, на котором читается слово $aaaaaa\,bbbbbb$ ($a^6 b^6$).
 
 \end{definition}
 
-\TODO: пример
+\begin{figure}[h]
+  \begin{minipage}[h]{0.5\linewidth}  
+    \begin{tikzpicture}[shorten >=1pt,auto]
+       \node[state] (q_0)                      {$0$};
+       \node[state] (q_1) [above right=of q_0] {$1$};
+       \node[state] (q_2) [right=of q_0]       {$2$};
+       \node[state] (q_3) [right=of q_2]       {$3$};
+        \path[->]
+        (q_0) edge[dkgreen, ultra thick] node {$a$} (q_1)
+        (q_1) edge[dkgreen, ultra thick]  node {$a$} (q_2)
+        (q_2) edge  node {$a$} (q_0)
+        (q_2) edge[bend left, above, dkgreen, ultra thick]  node {$b$} (q_3)
+        (q_3) edge[bend left, below, dkgreen, ultra thick]  node {$b$} (q_2);
+    \end{tikzpicture}
+    \caption{Корректный путь $v_0 \path v_2$}
+    \label{img:path_0_2}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[h]{0.5\linewidth}  
+    \begin{tikzpicture}[shorten >=1pt,auto]
+       \node[state] (q_0)                      {$0$};
+       \node[state] (q_1) [above right=of q_0] {$1$};
+       \node[state] (q_2) [right=of q_0]       {$2$};
+       \node[state] (q_3) [right=of q_2]       {$3$};
+        \path[->]
+        (q_0) edge[dkred, ultra thick] node {$a$} (q_1)
+        (q_1) edge  node {$a$} (q_2)
+        (q_2) edge[dkred, ultra thick]  node {$a$} (q_0)
+        (q_2) edge[bend left, above]  node {$a$} (q_3)
+        (q_3) edge[bend left, below, dkred, ultra thick]  node {$b$} (q_2);
+    \end{tikzpicture}
+    \caption{Некорректный путь $v_3 \path v_1$}
+    \label{img:path_3_1}
+  \end{minipage}
+\end{figure}
 
+\pagebreak
 
 \subsection*{Цель и задачи}
 
-Целью работы является получить решения для частных случаев в задаче поиска путей с контекстно-свободными ограничениями, основываясь на едином подходе.
+Целью работы является получение решений для частных случаев задачи поиска путей с контекстно-свободными ограничениями, основанных на едином подходе.
 
 Для её достижения решаются следующие задачи:
     \begin{itemize}
       \item Выбрать единый подход для решения задачи CFPQ
       \item Построить на его основе решения для следующих частных случаев:
         \begin{itemize}
-          \item Язык Дика $\cool{D}_k$ и двунаправленные графы
+          \item Язык Дика $\cool{D}_k$ на двунаправленных графах
           \item Язык Дика $\cool{D}_1$ (на одном типе скобок)
         \end{itemize}
-      \item Применить выбранного подхода для решение задачи достижимости для смешанный языка Дика $\cool{D}_1 \odot \cool{D}_1$ на двунаправленных графах
+      \item Применить выбранный подход для решения задачи достижимости для смешанного языка Дика $\cool{D}_1 \odot \cool{D}_1$ на двунаправленных графах
     \end{itemize}
-
-\TODO: Всё тут переписать
 
 \subsection*{Структура работы}
 

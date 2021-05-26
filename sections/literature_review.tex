@@ -89,11 +89,72 @@
   Неформально, матрица смежности такого графа симметрична, и метки на симметричных рёбрах~--- это парные открывающая/закрывающая скобки.
 \end{definition}
 
-\TODO: картиночька
+\begin{figure}[h]
+  \begin{minipage}[h]{0.5\linewidth}  
+    \begin{tikzpicture}
+      \tikzset{mynode/.append style={draw=black, circle,node distance=2cm}}
+          
+      \node[mynode] (n1)                {1};
+      \node[mynode] (n2)  [right=of n1] {2};
+      \node[mynode] (n3)  [above=of n2] {3};
+      \node[mynode] (n4)  [right=of n3] {4};
+      \node[mynode] (n5)  [above=of n4] {5};
+      \node[mynode] (n6)  [right=of n2] {6};
+          
+      \draw[draw=black,->,semithick] (n1) edge node [midway,below] {\texttt{(}$_1$} (n2);
+      \draw[draw=black,->,semithick,] (n1.100) to[out=100,in=170] node[above=of n1,above=0.1cm] {\texttt{(}$_2$} (n3);
+      \draw[draw=black,->,semithick] (n2) edge node [midway,right] {\texttt{)}$_3$} (n3);
+      \draw[draw=black,->,semithick] (n3) edge node [midway,below] {\texttt{(}$_2$} (n4);
+      \draw[draw=black,->,semithick] (n2) edge node [midway,below] {\texttt{)}$_1$} (n6);
+      \draw[draw=black,->,semithick] (n4) edge node [midway,right] {\texttt{)}$_2$} (n5);
+      \draw[draw=black,<-,semithick,] (n3.100) to[out=100,in=170] node[above=of n1,above=0.1cm] {\texttt{(}$_1$} (n5);
+    \end{tikzpicture}
+    \caption{Обычный ориентированный граф}
+    \label{img:path_0_2}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[h]{0.5\linewidth}  
+    \begin{tikzpicture}
+      \tikzset{mynode/.append style={draw=black, circle,node distance=2cm}}
+          
+      \node[mynode] (n1)                {1};
+      \node[mynode] (n2)  [right=of n1] {2};
+      \node[mynode] (n3)  [above=of n2] {3};
+      \node[mynode] (n4)  [right=of n3] {4};
+      \node[mynode] (n5)  [above=of n4] {5};
+      \node[mynode] (n6)  [right=of n2] {6};
+          
+      \draw[draw=black,->,semithick,bend right=10] (n1) edge node [midway,below] {\texttt{(}$_1$} (n2);
+      \draw[draw=black,<-,semithick,bend left=10]  (n1) edge node [midway,above] {\texttt{)}$_1$} (n2);
+          
+      \draw[draw=black,->,semithick,] (n1.100) to[out=100,in=170] node[above=of n1,above=0.1cm] {\texttt{(}$_2$} (n3);
+      \draw[draw=black,<-,semithick,] (n1.80) to[out=80,in=190] node[above=of n1,right=0.1cm] {\texttt{)}$_2$} (n3);
+          
+      \draw[draw=black,->,semithick,bend right=10] (n2) edge node [midway,right] {\texttt{(}$_3$} (n3);
+      \draw[draw=black,<-,semithick,bend left=10]  (n2) edge node [midway,left]  {\texttt{)}$_3$} (n3);
+          
+      \draw[draw=black,->,semithick,bend right=10] (n3) edge node [midway,below] {\texttt{(}$_2$} (n4);
+      \draw[draw=black,<-,semithick,bend left=10]  (n3) edge node [midway,above] {\texttt{)}$_2$} (n4);
+          
+      \draw[draw=black,->,semithick,bend right=10] (n2) edge node [midway,below] {\texttt{(}$_1$} (n6);
+      \draw[draw=black,<-,semithick,bend left=10]  (n2) edge node [midway,above] {\texttt{)}$_1$} (n6);
+          
+      \draw[draw=black,->,semithick,bend right=10] (n4) edge node [midway,right] {\texttt{(}$_2$} (n5);
+      \draw[draw=black,<-,semithick,bend left=10]  (n4) edge node [midway,left]  {\texttt{)}$_2$} (n5);
+          
+      \draw[draw=black,->,semithick,] (n3.100) to[out=100,in=170] node[above=of n1,above=0.1cm] {\texttt{(}$_1$} (n5);
+      \draw[draw=black,<-,semithick,] (n3.80) to[out=80,in=190] node[above=of n1,right=0.1cm] {\texttt{)}$_1$} (n5);    
+    \end{tikzpicture}
+    \caption{Двунаправленный граф}
+    \label{img:path_3_1}
+  \end{minipage}
+\end{figure}
 
 В своей работе Юань и др.~\cite{Yuan09} заметили, что при решении задачи анализа указателей\footnote{Points-to analysis} граф получается двунаправленным (так как отношения \t{GetField} и \t{PutField} взаимообратные). Также, они конструируют алгоритм, с временем работы $\O(|V| \log |V| \log k)$, в случае, если полученный граф является деревом. На внешнем уровне алгоритма строится центроидная декомпозиция, а для каждого конкретного центроида~--- бор $S$-префиксов\footnote{Строк, сформированных наивным алгоритмом проверки правильности скобочной последовательности с использованием стека} его поддерева. Чжан и др.~\cite{Zhang13}, заметив, что в двунаправленных графах Диково достижимые вершины формируют классы эквивалентности (\ref{lemma:bidir_equiv}), улучшили этот алгоритм, получив линейное время работы, а также сконструировали алгоритм для произвольных графов с временем работы $\O(|E| \log |E|)$. Позднее, Чаттерджи и др.~\cite{Chatterjee17} улучшили этот результат до $\O(|E| + |V| \alpha(|V|))$\footnote{$\alpha(n)$~--- обратная функция Аккермана}.
 
 Если к задаче анализа указателей добавить контекстную чувствительность\footnote{Context sensitivity}, то есть кроме записи/чтения полей учитывать ещё и вызов/возврат из функций, то её можно сформулировать в терминах смешанной Диковой достижимости.
+
+\pagebreak
 
 % Оператор смешения
 \begin{definition}

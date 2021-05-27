@@ -22,7 +22,7 @@
 
 \usepackage{perpage}
 \MakePerPage{footnote}
-% \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % Основные математические символы
 \def\eps{\varepsilon}                  % eps
@@ -60,6 +60,9 @@
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{dkred}{rgb}{0.8,0,0}
+
+\newlength{\strutheight}
+\settoheight{\strutheight}{\strut}
 
 \begin{document}
 % Год, город, название университета и факультета предопределены,

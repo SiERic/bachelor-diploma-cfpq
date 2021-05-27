@@ -1,11 +1,11 @@
-\section{Результаты (1)}\label{section:bidirected}
+\section{Язык Дика и двунаправленные графы}\label{section:bidirected}
 
 В данной главе будет рассмотрена модификация алгоритма~\ref{algo:PI}, основанная на ослаблении условия на граф, а именно, на ``предположении'', что он является неориентированным. Также будет доказана корректность данной модификации для двунаправленных графов и языка Дика, а также для неориентированных графов и некоторых видов грамматик.
 
 Для неориентированных графов отношение достижимости равно отношению ``принадлежать одной компоненте связности''. Поддерживать добавление рёбер и проверку связности в неориентированном графе можно с помощью структуры данных Система Непересекающихся Множеств. 
 
 % Система Непересекающихся Множеств (СНМ)
-\begin{definition}
+\begin{definition}\label{def:DSU}
   \textit{Система Непересекающихся Множеств (или СНМ)}\footnote{Disjoint-set/union–find data data structure}~\cite{Galler1964}~--- структура данных для работы с непересекающимися множествами. Её интерфейс включает следующие операции:
   \vspace{-\topsep}
   \begin{itemize}
@@ -111,12 +111,9 @@
 
 За основу взята стандартная реализация \cite{Hopcroft1973} на подвешенных деревьях, использующая обе эвристики: сжатие путей и ранговую. 
 
-% \TODO: \textit{Надо ли её расписывать?}
-% Ненадо
-
 Дополнительно в корнях хранятся списки всех начальных и конечных состояний компоненты. При добавлении ребра в операции \textit{Union} перебираются все пары начальная/конечная вершина из двух компонент и соответствующие им рёбра добавляются в рабочую очередь $Q$. 
 
-\TODO: (подумоть) можно ли добавлять сразу много рёбер и сжимать их дфсом (как Борувка)?
+% \TODO: (подумоть) можно ли добавлять сразу много рёбер и сжимать их дфсом (как Борувка)?
 
 \subsection*{Время работы}
 
@@ -132,10 +129,6 @@
   Итого, время работы алгоритма составляет $\O(|V| + |E^{*}| \alpha(|V|))$ ($\O(|V|)$ берётся из создания СНМ на $|V|$ множеств). 
 \end{proof}
 
-% \subsection{Корректность для неориентированных графов и некоторых классов грамматик}
-
-% \TODO: может, в мусорку этот subsection?
-
 \begin{note}
   Алгоритм~\ref{algo:NP} очевидно работает корректно на РКА, все рёбра которого неориентированы. Вспомним, что для решения задачи CFPQ алгоритм достижимости запускается на прямом произведении входного графа и РКА входной грамматики. Так что, чтобы произведение было неориентированным, необходима неориентированность и входного графа и РКА входной грамматики. 
 
@@ -150,13 +143,10 @@
   Алгоритм~\ref{algo:NP} работает корректно на двунаправленных графах и языке Дика.
 \end{theorem}
 
-% \textit{Напоминание, что для языка Дика контекстно-свободная достижимость $\to$ Дикова достижимость}
-
 Для доказательства потребуется следующее вспомогательное утверждение:
 
 \begin{lemma}\label{lemma:bidir_equiv}
   Для вершин двунаправленных графов отношении Диковой достижимости является отношением эквивалентности.
-  % For bidirected graphs the Dyck-reachability relation forms an equivalence, i.e., for all bidirected graphs $G$, for every pair of nodes $u$, $v$, we have that $v$ is Dyck-reachable from $u$ iff $u$ is Dyck-reachable from $v$.
 \end{lemma}
 \begin{proof}
 
@@ -165,22 +155,45 @@
 
 \end{proof}
 
-\begin{note}
-  В доказательстве для простоты будет рассматриваться язык Дика $\cool{D}_2$ (на двух типах скобок). Все рассуждения обобщаются на случай $k$ типов скобок.
-\end{note}
+\begin{adjustbox}{valign=T,raise=\strutheight,minipage={\linewidth}}
+  \begin{wrapfigure}{r}{0.47\linewidth}
+    \begin{tikzpicture}[shorten >=1pt,auto]
+       \node[state, initial]   (q_1)                      {$1$};
+       \node[state]            (q_2)  [above right=of q_1] {$2$};
+       \node[state, accepting] (q_3)  [right=of q_2]       {$3$};
+       \node[state]            (q_4)  [right=of q_1]       {$4$};
+       \node[state]            (q_5)  [right=of q_4]       {$5$};
+       \node[state, accepting] (q_6)  [right=of q_5]       {$6$};
+       \node[state]            (q_7)  [below right=of q_1] {$7$};
+       \node[state]            (q_8)  [right=of q_7]       {$8$};
+       \node[state, accepting] (q_9)  [right=of q_8]       {$9$};
+       \node[state, accepting] (q_10) [below=of q_8]       {$10$};
+        \path[->]
+        (q_1) edge[above, thick] node {$S$} (q_2)
+        (q_2) edge[above, thick] node {$S$} (q_3)
+        (q_1) edge[above, thick] node {$(_1$} (q_4)
+        (q_4) edge[above, thick] node {$S$} (q_5)
+        (q_5) edge[above, thick] node {$)_1$} (q_6)
+        (q_1) edge[below, thick] node {$(_2$} (q_7)
+        (q_7) edge[above, thick] node {$S$} (q_8)
+        (q_8) edge[above, thick] node {$)_2$} (q_9)
+        (q_1) edge[bend right, below, thick] node {$\eps$} (q_10);
+    \end{tikzpicture}
+    \caption{РКА для языка Дика $\cool{D}_2$.\\ Состоит из одной компоненты $S$.}
+    \label{img:dyck_rsm}
+  \end{wrapfigure}
 
-\begin{note}    
-  Для данного алгоритма будем использовать нестандартный РКА для языка Дика (изображён на рис.~\ref{img:dyck_rsm})
+  \strut{}
 
-  \begin{figure}[H]
-      \includegraphics[width=0.75\linewidth]{img/dyck_rsm}
-      \caption{РКА для языка Дика $\cool{D}_2$.\\ Заметим, что он содержит всего одну компоненту.}
-      \label{img:dyck_rsm}
-  \end{figure}
+  \begin{note}
+    В доказательстве для простоты будет рассматриваться язык Дика $\cool{D}_2$ (на двух типах скобок). Все рассуждения обобщаются на случай $k$ типов скобок.
+  \end{note}
 
-  \TODO: нарисовать красиво (+ eps переход)
+  \begin{note}    
+    Для данного алгоритма будем использовать не совсем стандартный РКА для языка Дика (изображён на рис.~\ref{img:dyck_rsm}). Нестандартность заключается в том, что он содержит несколько (а именно, $k + 2$) терминальных состояний, тогда как обычно они объединены в одну вершину.
+  \end{note}
 
-\end{note}
+\end{adjustbox}
 
 \begin{proof}{Теоремы~\ref{th:bidir_corr}}
 
@@ -194,35 +207,19 @@
 
   Для начала заметим, что компонента нашего РКА (произведения РКА языка Дика и входного графа) образует слоистую структуру: на $i$-ом слое~--- состояния $\q{q_i, u}$, где $q_i$~--- $i$-ое состояние РКА языка Дика. Т.к. РКА Дика топологически отсортирован, все рёбра ведут из слоя с меньшим номером в слой с большим.
 
-  % At first, note that the Kronecker product $G \otimes \mathcal{G}$ forms some kind of a layered structure~--- $i$-th layer consists of vertices $(q_i, v)$, where $q_i$ is $i$-th RSM state. Because RSM is topologically sorted ({\color{red}{TODO}}), every edge $(q_i, u) \rightarrow (q_j, v)$ goes forward.
-
   Назовём неориентированный путь \textit{простым}, если он проходит по каждому слою не боле одного раза.
 
   Пусть есть неориентированный путь $p \colon en \path ex$. Покажем, что тогда существует \textit{простой} путь $p' \colon en \path ex$. Заметим, что так как рёбра идут только из слоя с меньшим номером в слой с большим, то простой путь из первого слоя в последний на самом деле направлен согласно исходной ориентации рёбер. Т.е. такой простой путь и будет искомым.
 
   Доказывать это утверждение (про наличие простого пути $p'$) будем индукцией по длине пути.
 
-  % We will call path \textit{simple} if it visits every layer no more than once.
-
-  % We prove the claim by induction on the $l$ (path length).
-
   Очевидно, утверждение верно для путей длины 1, 2 и 3~--- все они и так являются простыми.
 
   Рассмотрим путь $p$ длины $\ge 4$, он уже не будет простым. Найдём первую \textit{точку перегиба} пути~--- вершину, из который путь идёт в состояние на слое с меньшим номером.
 
-  % Clearly the result is true for $l \le 3$, because the only way to achive final vertex in $1, 2$ or $3$ edges is by a simple vertical path (which exists in the original graph too).
-
-  % Otherwise (if $l \ge 4$), path is not simple. 
-
-  % Consider the first flex point of the path, that is the vertex $(q_i, v)$ such that edges $(q_j, u) \rightarrow (q_i, v)$ and $(q_i, v) \rightarrow (q_k, w)$ are in the path and $j, k \le i$ (so, the path is convex at this point).
-
   Внимательно посмотрев на РКА языка Дика, можно заметить, что все состояния имеют входящую степень 1 (для этого и нужен был нестандартный вид), так что рёбра, соседствующие в пути $p$ с точкой перегиба имеют одинаковую метку и идут на один и тот же уровень. Обозначим эти рёбра как $\q{q_i, u} \to \q{q_j, v} \to \q{q_i, w}$ ($\q{q_j, v}$~--- точка перегиба).
 
   Рассмотрим все 3 варианта возможной метки на рёбрах вокруг точки перегиба.
-
-  % Looking at the grammar graph we can notice, that every state has indegree $\le 1$. So at the flex point there are actually two same-labeled edges (that is, $j = k$). 
-
-  % There can be three different types of labels on those edges:
 
   \begin{itemize}
     \item открывающая скобка $(_k$
@@ -239,26 +236,13 @@
 
       Сожмём этот путь в одну вершину $uw$. Получим более короткий путь, для него по предположению индукции существует аналогичный простой путь. Если этот простой путь не проходит через вершину $uw$, то он и является ответом. Иначе. Если вершина $uw$ находится на 2, 4 или 7 слое, то следующее за ней ребро в простом пути имеет метку $S$, а значит, вместе с диковым путём $u \path w$ собирается в один диков путь (по правилу $S \to SS$, как в случае $(_k$). Если же $uw$ находится на 1 слое, то весь путь от неё до $z$~--- один диков путь, который так же складывается с путём $u \path w$.  
 
-      % $\mathcal{G}$ contains $S$-labeled edges $u \xrightarrow{S} v$ and $w \xrightarrow{S} v$. Since $\mathcal{G}$ is bidirected, then by \ref{r1} $v \xrightarrow{S} u$ and $v \xrightarrow{S} w$. Combining $u \xrightarrow{S} v$ and $v \xrightarrow{S} w$ we get that $u \xrightarrow{S} w$. 
-
-      % No we want to sort of contract this edge, joining $u$ and $w$ (on the $j$-th level). Then we can get (by induction hypothesis) the directed path from $(q_0, a) \rightsquigarrow (q_f, z)$. If new path does not contain joined $uw$ vertex, then that's the answer. Otherwise we can split this vertex back, inserting between $u$ and $w$ the $S$-labeled path (that one, from $u \xrightarrow{S} w$ edge). We can do it, because the both of these paths form correctly matched parenthesis ({\color{red}{TODO}}: we can prove this using stack-based checking algorithm).
-
-      % \textit{Two other cases can be proved the same way, but I find it a little dishonest}
-
     \item закрывающая скобка $)_k$
 
       $p \colon (q_1, a) \rightarrow \dots \rightarrow (q_i, u) \rightarrow (q_f, v) \rightarrow (q_i, w) \rightarrow \dots \rightarrow (q_f', z)$.
 
-      % Since $\alpha_l$-labeled edges could only be added on the initialization stage, 
-      % graph $\mathcal{G}$ contains edges $u \xrightarrow{\overline{\alpha_l}} v$ and $w \xrightarrow{\overline{\alpha_l}} v$. Notice, that cause $\mathcal{G}$ is bidirected, it also has to contain edges $v \xrightarrow{\alpha_l} u$ and $v \xrightarrow{\alpha_l} w$.
-
       По предположению индукции, существует простой путь $a \path v$, так что есть $S$-ребро $\q{q_1, a} \to \q{q_2, v}$. Поймём, почему будет и ребро $\q{q_2, v} \to \q{q_3, z}$, которое вместе с предыдущем даёт искомый простой путь.
 
       По двунаправленности графа, из наличия ребра $w \xrightarrow{)_k} v$ следует наличие ребра $v \xrightarrow{(_k)} w$. Вместе с изначальным $\eps$-ребром $w \xrightarrow{S} w$ и остатком пути $\q{q_i, w} \path \q{q_f', z}$ получаем более короткий путь, для которого, по предположению индукции существует аналогичный простой путь. Он и порождает второе ребро $\q{q_2, w} \to \q{q_3, z}$. 
-
-      % By induction, we get that $a \xrightarrow{S} v$. Now we will construct a second part of the path: $(q_0, v) \xrightarrow{\alpha_l} (q_{j-1}, w) \xrightarrow{S} (q_j, w) \rightsquigarrow (q_f, z)$ ($q_{j-1}, w) \xrightarrow{S} (q_j, w)$ ~--- initial $S$-loop). By induction, we have directed simple version of this path, so $v \xrightarrow{S} z$. 
-
-      % Combining this two paths ($a \xrightarrow{S} v$ and $v \xrightarrow{S} z$) we get $a \xrightarrow{SS} z \Rightarrow a \xrightarrow{S} z$~--- desired path.
 
     \begin{figure}[H]
         \includegraphics[width=\linewidth]{img/th_proof_img}
@@ -269,8 +253,8 @@
 
 \end{proof}
 
-\subsection{Выводы и результаты по главе}
+\subsection{Выводы и результаты {}по главе}
 
-\includegraphics[width=0.75\linewidth]{img/hole}
+В этой главе была представлена модификация алгоритма~\ref{algo:PI}, предполагающая неоринтированность данного ей РКА. Алгоритм~\ref{algo:NP} использует структуру данных СНМ~\ref{def:DSU} для поддержания инкрементального транзитивного замыкания неориентированного графа. Также была доказана корректность данного алгоритма для двунаправленных графов и языка Дика.
 
-\TODO
+% \includegraphics[width=0.75\linewidth]{img/hole}

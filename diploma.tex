@@ -15,14 +15,14 @@
 \usetikzlibrary{decorations.pathmorphing}
 \tikzset{
   snake it/.style={decorate, decoration=snake},
-  every state/.style={minimum size=0.3cm}}
+  every state/.style={minimum size=0.3cm}, ->,>=stealth}
 \usepackage[normalem]{ulem}
 \usepackage{wrapfig}
 \usepackage{adjustbox}
 
 \usepackage{perpage}
 \MakePerPage{footnote}
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+% \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % Основные математические символы
 \def\eps{\varepsilon}                  % eps

@@ -28,16 +28,48 @@ $L_2 \colon S_2 \to S_2 S_2~|~[_1 S_2 ]_1~|~ \dots [_j S_2 ]_j ~|~ \eps ~|~ (_1 
 \end{lemma}
 
 \begin{figure}[h]
-  \includegraphics[width=0.75\linewidth]{img/6n_6n_path}
+  \begin{tikzpicture}
+    \draw[-, help lines, color=gray!30, loosely dashed, ultra thick] (0, 6) -- (10, 6);
+    \draw[-, help lines, color=gray!30, loosely dashed, ultra thick] (6, 0) -- (6, 10);
+    \draw[->, ultra thick] (-0.5,0) -- (10,0)  node[right]{\LARGE $p$};
+    \draw[->, ultra thick] (0,-0.5) -- (0,10)  node[above]{\LARGE $b$};
+
+    \node at (-0.8, -0.5) {\large $(0, 0)$};
+    \node at (-0.8, 6)    {\large $6 |V|$};
+    \node at (6, -0.5)    {\large $6 |V|$};
+
+    \tikzset{every arrow subpath/.style={->, draw, thick}}
+
+    \draw[->, ultra thick] (0, 0) -- (0, 2);
+    \draw[->, ultra thick] (0, 2) -- (2, 2);
+    \draw[->, ultra thick] (2, 2) -- (2, 5);
+    \draw[->, ultra thick] (2, 5) -- (1, 5);
+    \draw[->, ultra thick] (1, 5) -- (1, 6);
+    \draw[->, dkred, ultra thick] (1, 6) -- (1, 8);
+    \draw[->, dkred, ultra thick] (1, 8) -- (4, 8);
+    \draw[->, dkred, ultra thick] (4, 8) -- (4, 6);
+    \draw[->, ultra thick] (4, 6) -- (4, 5);
+    \draw[->, ultra thick] (4, 5) -- (6, 5);
+    \draw[->, dkred, ultra thick] (6, 5) -- (7, 5);
+    \draw[->, dkred, ultra thick] (7, 5) -- (7, 4);
+    \draw[->, dkred, ultra thick] (7, 4) -- (8, 4);
+    \draw[->, dkred, ultra thick] (8, 4) -- (8, 2);
+    \draw[->, dkred, ultra thick] (8, 2) -- (6, 2);
+    \draw[->, ultra thick] (6, 2) -- (5, 2);
+    \draw[->, ultra thick] (5, 2) -- (5, 1);
+    \draw[->, ultra thick] (5, 1) -- (1, 1);
+    \draw[->, ultra thick] (1, 1) -- (1, 0);
+    \draw[->, ultra thick] (1, 0) -- (0, 0);
+
+  \end{tikzpicture}
+
   \caption{Путь в координатах баланса}
   \label{img:6v_path}
 \end{figure}
 
-\TODO: картиночька
-
 Нарисуем~(рис.~\ref{img:6v_path}) такой (как в утверждении леммы~\ref{lm:dyck_6v}) путь на плоскости, где первая координата~--- баланс круглых скобок, вторая~--- баланс квадратных (т.е. просто $p$ и $b$). Тогда во-первых, весь путь будет проходить в первой четверти. Во-вторых, он не будет заходить (найдётся такой, что не будет заходить, и мы ищем именно его) в сектор $[6|V|+1, +\oo) \times [6|V|+1, +\oo)$
     
-То есть путь можно искать следующего вида: он в основном проходит внутри квадрата $[0, 6|V|] \times [0, 6|V|]$, иногда выходя из него, но только по одной координате (т.е. либо в сектор $[0, 6|V|] \times [6|V| + 1, +\oo)$, либо в сектор $[6|V| + 1, +\oo) \times [0, 6|V|]$).
+То есть путь можно искать следующего вида: он в основном проходит внутри квадрата $[0, 6|V|] \times [0, 6|V|]$, иногда выходя из него, но только по одной координате (т.е. либо в сектор $[0, 6|V|] \times [6|V| + 1, +\oo)$, либо в сектор $[6|V| + 1, +\oo) \times [0, 6|V|]$) (обозначены на рис.~\ref{img:6v_path} красным цветом).
 
 Тогда можно искать отдельно две эти сущности: куски путей внутри квадрата $[0, 6|V|] \times [0, 6|V|]$, и куски путей снаружи.
 

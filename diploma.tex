@@ -19,6 +19,7 @@
 \usepackage[normalem]{ulem}
 \usepackage{wrapfig}
 \usepackage{adjustbox}
+\usepackage{pdfpages}
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
@@ -104,11 +105,14 @@
     chairHeadPosition  = {professor},
     chairHead          = {Alexander Omelchenko},
 }
+
+\includepdf[pages=-]{title.pdf}
+
 \maketitle
 
 \setcounter{page}{2}
 
-% \input{sections/abstract}
+\input{sections/abstract}
 
 \tableofcontents
 

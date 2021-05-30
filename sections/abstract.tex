@@ -1,7 +1,15 @@
 \section*{Аннотация}
 
-\TODO
+\textit{Задача поиска путей с контекстно-свободными ограничениями} является одной из важных задач в работе с графовыми моделями данных. Создано множество алгоритмов для её решения, но все они недостаточно эффективны для применения на практике, так что разрабатываются частные решения, более оптимальные, чем общие. Однако существующие частные решения слишком разнородны и не могут быть переиспользованы для построения новых алгоритмов. В данной работе был предложен общий подход к созданию эффективных частных решений, заключающийся в модификациях алгоритма, основанного на идее пересечения языков и поддержке инкрементального транзитивного замыкания. Одной из таких модификаций является работа с неориентированными графами вместо ориентированных. Полученный с её помощью алгоритм применим для решения задачи поиска путей с контекстно-свободными ограничениями на двунаправленных графах и языке Дика. Вторая модификация заключается в пересчёте транзитивного замыкания после каждой итерации добавления рёбер, вместо поддержки обновления отношения достижимости при одиночном добавлении. Такое решение применимо при малом числе итераций пересчёта транзитивного замыкания. Для языка Дика на одном типе скобок была сконструирована специальная грамматика, дающее полилогарифмическое число итераций и, следовательно, субкубический алгоритм. Также идея пересечения языков была использована для ускорения решения другой задачи, а именно, поиска путей с ограничениями, заданными смешанным языком Дика.
+
+\vspace{1em}
+
+\textit{Ключевые слова:} задача достижимости, графовые алгоритмы, формальные языки, транзитивное замыкание, частные случаи
 
 \pagebreak
 
-\TODO
+\textit{Context-free path querying problem} is an important task for graph­based data models. Many algorithms for this problem have been proposed, but none of them is performant enough for practical use, so more effective solutions for special cases are being developed. However, the existing partial solutions are too diverse and cannot be reused to build new algorithms. In this work, we propose a general approach for creating effective partial solutions, based on the idea of language intersection and incremental transitive closure. Each partial solution is a modification of the baseline algorithm. One such modification is to consider undirected graphs instead of directed one. This modification can be applied to bidirected graphs and Dyck language. The second modification is to recalculate the transitive closure after each iteration of edge additions, instead of incremental updating of reachability relation. This solution is effective on graphs with a small number of transitive closure recalculation iterations. For Dyck language with one parenthesis type special grammar was constructed, such that number of iterations of transitive closure recalculation is poly\-logarithmic, which implies a subcubic algorithm. Also, the idea of language intersection was used to speed up the solution for another problem, that is paths querying with constraints given by interleaved Dyck language.
+
+\vspace{1em}
+
+\textit{Keywords:} reachability problem, graph algorithms, formal languages, transitive closure, special cases

@@ -20,9 +20,10 @@
 \usepackage{wrapfig}
 \usepackage{adjustbox}
 
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
 \usepackage{perpage}
 \MakePerPage{footnote}
-% \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % Основные математические символы
 \def\eps{\varepsilon}                  % eps
@@ -121,7 +122,5 @@
 
 \bibliographystyle{ugost2008ls}
 \bibliography{bib.bib}
-
-\input{sections/kek}
 
 \end{document}

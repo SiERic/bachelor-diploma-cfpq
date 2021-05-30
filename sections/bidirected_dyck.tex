@@ -117,7 +117,7 @@
 
 \subsection*{Время работы}
 
-\begin{theorem}
+\begin{theorem}\label{thm:bidirected}
   На РКА из $|V|$ состояний и $|E^{*}|$ рёбрах в транзитивном замыкании, алгоритм~\ref{algo:NP} отработает за время $\O(|V| + |E^{*}| \alpha(|V|))$
 \end{theorem}
 
@@ -228,6 +228,41 @@
 
       Рёбра с меткой $(_k$ соответствуют рёбрам входного графа, а именно рёбрам $u \xrightarrow{(_k)} v$ и $w \xrightarrow{(_k)} v$. Заметим, что тогда, по двунаправленности графа, существует и ребро $v \xrightarrow{)_k} w$, дающее вместе с ребром $u \xrightarrow{(_k)} v $ путь $(_k )_k$ из $u$ в $w$, порождающий $S$-ребро $\q{q_1, u} \to \q{q_2, w}$. Также, по предположению индукции существует простой путь $\q{q_1, w} \to \q{q_f, z}$, а значит есть и $S$-ребро $\q{q_2, w} \to \q{q_3, z}$. Вместе эти два ребра формируют просто путь $\q{q_1, u} \to \q{q_2, w} \to \q{q_3, z}$, что и хотелось.
 
+      \begin{figure}[h]
+        \begin{minipage}[t]{0.5\linewidth}
+          \begin{tikzpicture}[shorten >=1pt, auto, node distance=1cm]
+            \node[state] (u)                    {$u$};
+            \node[state] (v) [right=of u]       {$v$};
+            \node[state] (w) [right=of v]       {$w$};
+            \node[state] (z) [right=2.5cm of w] {$z$};
+            \path[->]
+              (u) edge[bend left, above]  node {$(_k$} (v)
+              (v) edge[bend left, above]  node {$)_k$} (w)
+              (u) edge[bend right, below] node {$S$}   (w)
+              (w) edge[bend right, below] node {$S$}   (z)
+              (w) edge[bend left, decorate, decoration={snake}] node {} (z);
+          \end{tikzpicture}
+          \caption{Случай с меткой $(_k$}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.5\linewidth} 
+          \begin{tikzpicture}[shorten >=1pt, auto, node distance=1cm]
+            \node[state] (a)                    {$a$};
+            \node[state] (v) [right=2.5cm of a] {$v$};
+            \node[state] (w) [right=of v]       {$w$};
+            \node[state] (z) [right=of w]       {$z$};
+            \path[->]
+              (a) edge[bend left, decorate, decoration={snake}]  node {}    (v)
+              (a) edge[bend right, below]                        node {$S$} (v)
+              (v) edge[bend left, above]  node {$(_k$} (w)
+              (w) edge[loop above] node {$S$} ()
+              (v) edge[bend right, below] node {$S$}   (z)
+              (w) edge[bend left, decorate, decoration={snake}] node {} (z);
+          \end{tikzpicture}
+          \caption{Случай с меткой $)_k$}
+          \end{minipage}
+      \end{figure}
+
     \item $S$-метки
 
       $p \colon (q_1, a) \rightarrow \dots \rightarrow (q_i, u) \rightarrow (q_j, v) \rightarrow (q_i, w) \rightarrow \dots \rightarrow (q_f, z)$.
@@ -244,16 +279,16 @@
 
       По двунаправленности графа, из наличия ребра $w \xrightarrow{)_k} v$ следует наличие ребра $v \xrightarrow{(_k)} w$. Вместе с изначальным $\eps$-ребром $w \xrightarrow{S} w$ и остатком пути $\q{q_i, w} \path \q{q_f', z}$ получаем более короткий путь, для которого, по предположению индукции существует аналогичный простой путь. Он и порождает второе ребро $\q{q_2, w} \to \q{q_3, z}$. 
 
-    \begin{figure}[H]
-        \includegraphics[width=\linewidth]{img/th_proof_img}
-    \end{figure}
+    % \begin{figure}[H]
+    %     \includegraphics[width=\linewidth]{img/th_proof_img}
+    % \end{figure}
 
-    \TODO: норм картинка
+    % \TODO: норм картинка
   \end{itemize}
 
 \end{proof}
 
-\subsection{Выводы и результаты {}по главе}
+\subsection{Выводы и результаты по главе}
 
 В этой главе была представлена модификация алгоритма~\ref{algo:PI}, предполагающая неоринтированность данного ей РКА. Алгоритм~\ref{algo:NP} использует структуру данных СНМ~\ref{def:DSU} для поддержания инкрементального транзитивного замыкания неориентированного графа. Также была доказана корректность данного алгоритма для двунаправленных графов и языка Дика.
 

@@ -458,13 +458,92 @@
 \end{figure}
 
 \begin{figure}[H]
+  \begin{tikzpicture}[scale=0.6]
+    \draw[help lines, color=gray!30, dashed] (-0.5,-0.5) grid (24.5,7.5);
+    \draw[->,ultra thick] (-0.5,0) -- (24.5,0) node[right]{$x$};
+    \draw[->,ultra thick] (0,-0.5) -- (0,7.5)  node[above]{$y$};
 
+    \edef\x{0}
+    \edef\y{0}
+
+    \newcommand\up{}
+    \def\up{
+      \draw[->,thick] (\x,\y)--++(1,1); 
+      \pgfmathparse{\x+1}
+      \edef\x{\pgfmathresult}
+      \pgfmathparse{\y+1}
+      \edef\y{\pgfmathresult}
+    }
+
+    \newcommand\down{}
+    \def\down{
+      \draw[->,thick] (\x,\y)--++(1,-1); 
+      \pgfmathparse{\x+1}
+      \edef\x{\pgfmathresult}
+      \pgfmathparse{\y-1}
+      \edef\y{\pgfmathresult}
+    }
+
+    \up; \up; \up; \up; \up;
+    \down; \down; \down; \down;
+    \up; \up; \up;
+    \down; \down; \down; \down;
+    \up; \up; \up;
+    \down;
+    \up;
+    \down; \down; \down;
+
+    \tikzset{every loop/.style={min distance=15mm,in=60,out=120}}
+
+    \path[->, thick, dkred, above] (0.5, 0.25) edge node {\footnotesize $S$} (15.5, 0.25);
+    \path[->, thick, dkred, above] (16.5, 0.25) edge node {\footnotesize $S$} (23.5, 0.25);
+    
+  \end{tikzpicture}
   \caption{Кек}
   \label{img:dyck1_example_6}
 \end{figure}
 
 \begin{figure}[H]
+  \begin{tikzpicture}[scale=0.6]
+    \draw[help lines, color=gray!30, dashed] (-0.5,-0.5) grid (24.5,7.5);
+    \draw[->,ultra thick] (-0.5,0) -- (24.5,0) node[right]{$x$};
+    \draw[->,ultra thick] (0,-0.5) -- (0,7.5)  node[above]{$y$};
 
+    \edef\x{0}
+    \edef\y{0}
+
+    \newcommand\up{}
+    \def\up{
+      \draw[->,thick] (\x,\y)--++(1,1); 
+      \pgfmathparse{\x+1}
+      \edef\x{\pgfmathresult}
+      \pgfmathparse{\y+1}
+      \edef\y{\pgfmathresult}
+    }
+
+    \newcommand\down{}
+    \def\down{
+      \draw[->,thick] (\x,\y)--++(1,-1); 
+      \pgfmathparse{\x+1}
+      \edef\x{\pgfmathresult}
+      \pgfmathparse{\y-1}
+      \edef\y{\pgfmathresult}
+    }
+
+    \up; \up; \up; \up; \up;
+    \down; \down; \down; \down;
+    \up; \up; \up;
+    \down; \down; \down; \down;
+    \up; \up; \up;
+    \down;
+    \up;
+    \down; \down; \down;
+
+    \tikzset{every loop/.style={min distance=15mm,in=60,out=120}}
+
+    \path[->, thick, dkred, below] (0.25, -0.25) edge node {\footnotesize $S$} (23.75, -0.25);
+    
+  \end{tikzpicture}
   \caption{Кек}
   \label{img:dyck1_example_1}
 \end{figure}
@@ -489,7 +568,7 @@
 
 \subsubsection{Время работы}
 
-\begin{theorem}
+\begin{theorem}\label{thm:dyck_1}
   Время работы алгоритма~\ref{algo:P} для языка Дика на одном типе скобок~--- $\O(|V|^{\omega} \log^3 |V|)$.
 \end{theorem}
 
